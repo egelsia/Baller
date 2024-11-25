@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Fixtures"
+        android:id="@+id/fixtures"
+        android:icon="@drawable/round_access_time_24"/>
+    <item android:title="Standings"
+        android:id="@+id/standings"
+        android:icon="@drawable/standings_24"/>
+    <item android:title="Teams"
+        android:id="@+id/teams"
+        android:icon="@drawable/rounded_sports_soccer_24"/>
+</menu>
