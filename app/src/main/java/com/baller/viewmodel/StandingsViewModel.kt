@@ -30,6 +30,7 @@ class StandingsViewModel: ViewModel() {
             when (val result = apiService.getStandingsBySeasonId(seasonId)) {
                 is ApiResult.Success -> {
                     _standings.value = result.data
+                    Log.d(TAG, result.data.toString())
                     _error.value = ""
                 }
                 is ApiResult.Error -> {

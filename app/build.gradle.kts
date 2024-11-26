@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id("org.jetbrains.kotlin.plugin.serialization") version "2.0.21"
+    kotlin("kapt") version "2.0.21"
+
 }
 
 android {
@@ -58,4 +60,5 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation (libs.glide)
     implementation(libs.material)
+    implementation(libs.androidx.fragment.ktx)
 }

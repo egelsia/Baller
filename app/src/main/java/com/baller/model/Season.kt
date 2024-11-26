@@ -12,8 +12,8 @@ data class Season(
     val finished: Boolean,
     val pending: Boolean,
     val is_current: Boolean,
-    val starting_at: String,
-    val ending_at: String,
-    val standings_recalculated_at: String,
+    val starting_at: String?,
+    val ending_at: String?,
+    val standings_recalculated_at: String?,
     val games_in_current_week: Boolean
 )

@@ -36,7 +36,7 @@ class APIService {
     }
 
     suspend fun getAllTeams(): ApiResult<List<Team>> {
-        val responseUrl = "/teams?${token}&include=activeSeasons"
+        val responseUrl = "/teams?${token}&include=activeSeasons&per_page=50"
 
         return try {
             val response: HttpResponse = client.get(baseUrl + responseUrl)

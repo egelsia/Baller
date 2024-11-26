@@ -3,14 +3,13 @@ package com.baller.activity
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.baller.R
 import com.baller.databinding.ActivityMainBinding
 import com.baller.fragment.FixtureFragment
 import com.baller.fragment.StandingsFragment
 import com.baller.fragment.TeamsFragment
+import com.baller.viewmodel.StandingsViewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,6 +31,9 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+        val standings = StandingsViewModel()
+        standings.fetchStandings(23584)
+
     }
 
     private fun replaceFragment(fragment: Fragment) {
@@ -42,5 +44,5 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Danish Superliga season id = 23584
-    // Scottish Premiership season id = 23690`
+    // Scottish Premiership season id = 23690
 }
