@@ -1,6 +1,7 @@
 package com.baller.service
 
 import com.baller.model.Standing
+import com.baller.model.Team
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.android.Android
@@ -24,9 +25,69 @@ sealed class ApiResult<out T> {
 
 class APIService {
 
+    // if (league_id == 501) => Scottish Premiership
+    // if (league_id == 271) => Danish Superliga
+
+
     private val client = HttpClient(Android) {
         install(ContentNegotiation) {
             json()
+        }
+    }
+
+    suspend fun getAllTeams(): ApiResult<List<Team>> {
+        val responseUrl = "/teams?${token}&include=activeSeasons"
+
+        return try {
+            val response: HttpResponse = client.get(baseUrl + responseUrl)
+
+            when (response.status) {
+                HttpStatusCode.OK -> {
+                    val teamsData: Map<String, JsonElement> = response.body()
+                    val teams = kotlinx.serialization.json.Json.decodeFromJsonElement<List<Team>>(
+                        teamsData["data"] ?: return ApiResult.Error(
+                            -1,
+                            "Invalid Response Format"
+                        )
+                    )
+                    ApiResult.Success(teams)
+                }
+                HttpStatusCode.BadRequest -> ApiResult.Error(
+                    400,
+                    "Bad Request: The request was malformed"
+                )
+
+                HttpStatusCode.Unauthorized -> ApiResult.Error(
+                    401,
+                    "Unauthorized: Please check API credentials"
+                )
+
+                HttpStatusCode.Forbidden -> ApiResult.Error(
+                    403,
+                    "Forbidden: This resource is not available in your current plan"
+                )
+
+                HttpStatusCode.TooManyRequests -> ApiResult.Error(
+                    429,
+                    "Rate Limit Exceeded."
+                )
+
+                HttpStatusCode.InternalServerError -> ApiResult.Error(
+                    500,
+                    "Internal Server Error."
+                )
+                else -> ApiResult.Error(
+                    response.status.value,
+                    "Request failed with status: ${response.status.description}"
+                )
+            }
+
+        } catch (e: IOException) {
+            ApiResult.Error(-1, "Network Error. Please check your internet connection.")
+        } catch (e: SerializationException) {
+            ApiResult.Error(-1, "Data parsing error: ${e.message}")
+        } catch (e: Exception) {
+            ApiResult.Error(-1, "Unknown error: ${e.message}")
         }
     }
 

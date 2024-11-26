@@ -1,0 +1,18 @@
+[
+  {
+    "id": 271,
+    "sport_id": 1,
+    "country_id": 320,
+    "name": "Superliga",
+    "short_code": "DNK SL",
+    "image_path": "https://cdn.sportmonks.com/images/soccer/leagues/271.png"
+  },
+  {
+    "id": 501,
+    "sport_id": 1,
+    "country_id": 1161,
+    "name": "Premiership",
+    "short_code": "SCO P",
+    "image_path": "https://cdn.sportmonks.com/images/soccer/leagues/501.png"
+  }
+]

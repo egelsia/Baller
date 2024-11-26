@@ -15,5 +15,6 @@ data class Team(
     val founded: Int,
     val type: String,
     val placeholder: Boolean,
-    val last_played_at: String
+    val last_played_at: String,
+    val activeseasons: List<Season>? = null
 )
