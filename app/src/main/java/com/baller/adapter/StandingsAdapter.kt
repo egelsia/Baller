@@ -1,42 +1,56 @@
 package com.baller.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.baller.R
+import com.baller.databinding.StandingsItemBinding
 import com.baller.model.Standing
-import com.bumptech.glide.Glide
+import com.baller.viewmodel.StandingsViewModel
 
-//class StandingsAdapter: RecyclerView.Adapter<StandingsAdapter.StandingViewHolder>() {
-//    private var standings: List<Standing> = emptyList()
-//
-//    fun updateStandings(newStandings: List<Standing>) {
-//        standings = newStandings
-//        notifyDataSetChanged()
-//    }
-//
-//    override fun onCreateViewHolder(
-//        parent: ViewGroup,
-//        viewType: Int
-//    ): StandingViewHolder {
-//        val binding = ItemStandingBinding.inflate(
-//            LayoutInflater.from(parent.context),
-//            parent,
-//            false
-//        )
-//        return StandingViewHolder(binding)
-//    }
-//
-//    override fun getItemCount(): Int = standings.size
-//
-//
-//    override fun onBindViewHolder(holder: StandingViewHolder, position: Int) {
-//        holder.bind(standings[position])
-//    }
-//
-//    class StandingViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-//        private lateinit var standing: Standing
-//
-//
-//    }
-//}
+class StandingsAdapter(private val standingsViewModel: StandingsViewModel) : ListAdapter<Standing, StandingsAdapter.StandingsViewHolder>(StandingsDiffCallback()) {
+
+    class StandingsViewHolder private constructor(
+        private val binding: StandingsItemBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(standing: Standing, standingsViewModel: StandingsViewModel) {
+            binding.standing = standing
+            binding.viewModel = standingsViewModel
+            binding.executePendingBindings()
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): StandingsViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = StandingsItemBinding.inflate(layoutInflater, parent, false)
+                return StandingsViewHolder(binding)
+            }
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StandingsViewHolder {
+        return StandingsViewHolder.from(parent)
+    }
+
+    override fun onBindViewHolder(holder: StandingsViewHolder, position: Int) {
+        holder.bind(getItem(position), standingsViewModel)
+    }
+
+    class StandingsDiffCallback: DiffUtil.ItemCallback<Standing>() {
+        override fun areItemsTheSame(oldItem: Standing, newItem: Standing): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Standing, newItem: Standing): Boolean {
+            return oldItem == newItem
+        }
+    }
+
+
+
+}
