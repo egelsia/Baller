@@ -24,3 +24,22 @@ fun loadImage(view: ImageView, url: String?) {
 fun setLeagueName(textView: TextView, viewModel: TeamsViewModel, team: Team) {
     textView.text = viewModel.getLeagueName(team)
 }
+@BindingAdapter("movementIndicator")
+fun setMovementIndicator(imageView: ImageView, result: String?) {
+    result?.let {
+        when (it) {
+            "up" -> {
+                imageView.setImageResource(R.drawable.ic_arrow_up_green)
+            }
+            "down" -> {
+                imageView.setImageResource(R.drawable.ic_arrow_down_red)
+            }
+            "equal" -> {
+                imageView.setImageResource(R.drawable.ic_horizontal_black)
+            }
+            else -> {
+                imageView.setImageResource(0)
+            }
+        }
+    }
+}

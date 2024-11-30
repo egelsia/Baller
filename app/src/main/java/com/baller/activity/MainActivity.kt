@@ -21,6 +21,8 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
         replaceFragment(FixtureFragment())
+        var viewmodel =  StandingsViewModel();
+        viewmodel.fetchStandings(23584);
 
         binding.bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId) {
