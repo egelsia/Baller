@@ -4,30 +4,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:paddingHorizontal="8dp"
     tools:context=".fragment.StandingsFragment">
-
 
     <LinearLayout
         android:id="@+id/leagueButtonsContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="16dp">
+        android:gravity="center_vertical"
+        android:paddingBottom="8dp">
 
         <Button
             android:id="@+id/buttonDanishSuperliga"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="64dp"
             android:layout_weight="1"
             android:text="Danish Superliga" />
+
+        <Space
+            android:layout_width="8dp"
+            android:layout_height="wrap_content"/>
 
         <Button
             android:id="@+id/buttonScottishPremierLeague"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="64dp"
+
             android:layout_weight="1"
-            android:layout_marginStart="8dp"
             android:text="Scottish Premier League" />
     </LinearLayout>
 
@@ -36,16 +40,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingBottom="8dp">
+        android:padding="8dp">
 
 
         <TextView
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:text="Rank"
-            android:textSize="16sp"
+            android:textSize="12sp"
             android:textStyle="bold"
-            android:textColor="@android:color/black"
             android:gravity="center"/>
 
 
@@ -54,9 +57,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Team"
-            android:textSize="16sp"
+            android:textSize="12sp"
             android:textStyle="bold"
-            android:textColor="@android:color/black"
             android:layout_marginStart="16dp"/>
 
 
@@ -64,31 +66,31 @@
             android:id="@+id/textViewPointsHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:text="Points"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:layout_marginEnd="8dp"/>
+            android:textSize="12sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewStandings"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
         android:layout_weight="1"
-        tools:listitem="@layout/standings_item" />
+        android:paddingHorizontal="8dp">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewStandings"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/standings_item" />
 
-    <ProgressBar
-        android:id="@+id/progressBarStandings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        android:indeterminateTint="@android:color/holo_blue_dark" />
+        <ProgressBar
+            android:id="@+id/progressBarStandings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+    </FrameLayout>
 
 
     <TextView
@@ -98,11 +100,9 @@
         android:layout_gravity="center"
         android:visibility="gone"
         android:text="An error occurred. Please try again."
-        android:textColor="@android:color/holo_red_dark"
         android:textSize="18sp"
         android:textStyle="bold"
         android:padding="16dp"
-        android:background="@android:color/white"
         android:elevation="6dp" />
 
 </LinearLayout>

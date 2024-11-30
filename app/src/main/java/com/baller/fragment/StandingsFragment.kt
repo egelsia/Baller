@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.baller.adapter.StandingsAdapter
+import com.baller.adapter.TeamAdapter
 import com.baller.databinding.FragmentStandingsBinding
 import com.baller.viewmodel.StandingsViewModel
 
@@ -30,7 +32,24 @@ class StandingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        standingsAdapter = StandingsAdapter(standingsViewModel)
+
+        standingsAdapter = StandingsAdapter(standingsViewModel) {team ->
+            val directions = StandingsFragmentDirections.actionStandingsFragmentToTeamDetailsActivity(
+                teamId = team.id,
+                teamName = team.name,
+                teamFounded = team.founded?.toString() ?: "No Data",
+                teamShort = team.short_code ?: "No Data",
+                teamImgPath = team.image_path
+            )
+            findNavController().navigate(directions)
+        }
+
+        binding.recyclerViewStandings.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = standingsAdapter
+        }
+
+        standingsViewModel.fetchStandings(seasonId = 23584)
         binding.recyclerViewStandings.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = standingsAdapter

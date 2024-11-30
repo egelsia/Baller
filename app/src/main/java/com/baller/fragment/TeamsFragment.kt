@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.baller.adapter.TeamAdapter
 import com.baller.databinding.FragmentTeamsBinding
@@ -40,7 +41,16 @@ class TeamsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         teamViewModel.initLeagues(requireContext())
-        val adapter = TeamAdapter(teamViewModel)
+        val adapter = TeamAdapter(teamViewModel) { team ->
+                val directions = TeamsFragmentDirections.actionTeamsFragmentToTeamDetailsActivity(
+                    teamId = team.id,
+                    teamName = team.name,
+                    teamFounded = team.founded?.toString() ?: "No Data",
+                    teamShort = team.short_code ?: "No Data",
+                    teamImgPath = team.image_path
+                )
+            findNavController().navigate(directions)
+        }
         binding.recyclerView.apply {
             this.adapter = adapter
             layoutManager = LinearLayoutManager(requireContext())

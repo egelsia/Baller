@@ -9,15 +9,21 @@ import com.baller.databinding.TeamCardBinding
 import com.baller.model.Team
 import com.baller.viewmodel.TeamsViewModel
 
-class TeamAdapter(private val teamViewModel: TeamsViewModel) : ListAdapter<Team, TeamAdapter.TeamViewHolder>(TeamDiffCallback()) {
+class TeamAdapter(private val teamViewModel: TeamsViewModel,
+    private val onClick: (Team) -> Unit) : ListAdapter<Team, TeamAdapter.TeamViewHolder>(TeamDiffCallback()) {
 
     class TeamViewHolder private constructor(
         private val binding: TeamCardBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(team: Team, teamViewModel: TeamsViewModel) {
+        fun bind(team: Team, teamViewModel: TeamsViewModel, onClick: (Team) -> Unit) {
             binding.team = team
             binding.viewModel = teamViewModel
+
+            binding.root.setOnClickListener {
+                onClick(team)
+            }
+
             binding.executePendingBindings()
         }
 
@@ -35,7 +41,7 @@ class TeamAdapter(private val teamViewModel: TeamsViewModel) : ListAdapter<Team,
     }
 
     override fun onBindViewHolder(holder: TeamViewHolder, position: Int) {
-        holder.bind(getItem(position), teamViewModel)
+        holder.bind(getItem(position), teamViewModel, onClick)
     }
 
     class TeamDiffCallback: DiffUtil.ItemCallback<Team>() {

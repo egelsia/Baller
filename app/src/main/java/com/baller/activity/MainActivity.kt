@@ -3,48 +3,36 @@ package com.baller.activity
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.baller.R
 import com.baller.databinding.ActivityMainBinding
-import com.baller.fragment.FixtureFragment
-import com.baller.fragment.StandingsFragment
-import com.baller.fragment.TeamsFragment
-import com.baller.viewmodel.StandingsViewModel
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         enableEdgeToEdge()
         setContentView(binding.root)
-        replaceFragment(FixtureFragment())
-        var viewmodel =  StandingsViewModel();
-        viewmodel.fetchStandings(23584);
 
-        binding.bottomNavigationView.setOnItemSelectedListener {
-            when(it.itemId) {
-                R.id.teams -> replaceFragment(TeamsFragment())
-                R.id.fixtures -> replaceFragment(FixtureFragment())
-                R.id.standings -> replaceFragment(StandingsFragment())
-                else -> {}
-            }
-            true
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
+            insets
         }
-        val standings = StandingsViewModel()
-        standings.fetchStandings(23584)
 
+        val navHostFragment = binding.navHostFragmentContainer.getFragment<NavHostFragment>()
+        navController = navHostFragment.navController
+
+        binding.bottomNavigationView.setupWithNavController(navController)
     }
-
-    private fun replaceFragment(fragment: Fragment) {
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.frameLayout, fragment)
-        fragmentTransaction.commit()
-    }
-
     // Danish Superliga season id = 23584
     // Scottish Premiership season id = 23690
 }

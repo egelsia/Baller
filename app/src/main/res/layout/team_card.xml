@@ -16,8 +16,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="8dp"
-        android:layout_margin="8dp"
-        app:cardElevation="4dp">
+        android:layout_margin="4dp"
+        app:cardElevation="4dp"
+        android:focusable="true"
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackgroundBorderless">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

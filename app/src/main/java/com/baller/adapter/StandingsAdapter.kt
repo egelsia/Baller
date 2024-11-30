@@ -10,17 +10,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.baller.R
 import com.baller.databinding.StandingsItemBinding
 import com.baller.model.Standing
+import com.baller.model.Team
 import com.baller.viewmodel.StandingsViewModel
 
-class StandingsAdapter(private val standingsViewModel: StandingsViewModel) : ListAdapter<Standing, StandingsAdapter.StandingsViewHolder>(StandingsDiffCallback()) {
+class StandingsAdapter(private val standingsViewModel: StandingsViewModel, private val onClick: (Team) -> Unit) : ListAdapter<Standing, StandingsAdapter.StandingsViewHolder>(StandingsDiffCallback()) {
 
     class StandingsViewHolder private constructor(
         private val binding: StandingsItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(standing: Standing, standingsViewModel: StandingsViewModel) {
+        fun bind(standing: Standing, standingsViewModel: StandingsViewModel, onClick: (Team) -> Unit) {
             binding.standing = standing
             binding.viewModel = standingsViewModel
+
+            binding.root.setOnClickListener {
+                onClick(standing.participant)
+            }
+
             binding.executePendingBindings()
         }
 
@@ -38,7 +44,7 @@ class StandingsAdapter(private val standingsViewModel: StandingsViewModel) : Lis
     }
 
     override fun onBindViewHolder(holder: StandingsViewHolder, position: Int) {
-        holder.bind(getItem(position), standingsViewModel)
+        holder.bind(getItem(position), standingsViewModel, onClick)
     }
 
     class StandingsDiffCallback: DiffUtil.ItemCallback<Standing>() {
