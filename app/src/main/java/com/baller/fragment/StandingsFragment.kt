@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.baller.adapter.StandingsAdapter
-import com.baller.adapter.TeamAdapter
 import com.baller.databinding.FragmentStandingsBinding
 import com.baller.viewmodel.StandingsViewModel
 

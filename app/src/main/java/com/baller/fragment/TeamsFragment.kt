@@ -13,16 +13,6 @@ import com.baller.adapter.TeamAdapter
 import com.baller.databinding.FragmentTeamsBinding
 import com.baller.viewmodel.TeamsViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [TeamsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class TeamsFragment : Fragment() {
     private lateinit var teamViewModel: TeamsViewModel
     private var _binding: FragmentTeamsBinding? = null

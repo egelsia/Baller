@@ -2,12 +2,9 @@ package com.baller.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
-import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.baller.R
 import com.baller.databinding.StandingsItemBinding
 import com.baller.model.Standing
 import com.baller.model.Team
