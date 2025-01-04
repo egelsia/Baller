@@ -9,12 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.baller.R
 import com.baller.adapter.StandingsAdapter
 import com.baller.databinding.FragmentStandingsBinding
 import com.baller.viewmodel.StandingsViewModel
 
 class StandingsFragment : Fragment() {
-
     private lateinit var standingsViewModel: StandingsViewModel
     private var _binding: FragmentStandingsBinding? = null
     private val binding get() = _binding!!
@@ -31,39 +31,54 @@ class StandingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        standingsViewModel.setCurrentLeague(standingsViewModel.leagues[0])
+        setupRecyclerView()
+        setupLeagueSelection()
+        observeViewModel()
+    }
 
-        standingsAdapter = StandingsAdapter(standingsViewModel) {team ->
-            val directions = StandingsFragmentDirections.actionStandingsFragmentToTeamDetailsActivity(
-                teamId = team.id,
-                teamName = team.name,
-                teamFounded = team.founded?.toString() ?: "No Data",
-                teamShort = team.short_code ?: "No Data",
-                teamImgPath = team.image_path
-            )
-            findNavController().navigate(directions)
+    private fun setupRecyclerView() {
+        standingsAdapter = StandingsAdapter(standingsViewModel) { team ->
+            standingsViewModel.currentLeague.value?.let { currentLeague ->
+                val directions = StandingsFragmentDirections.actionStandingsFragmentToTeamDetailsActivity(
+                    teamId = team.id,
+                    teamName = team.name,
+                    teamFounded = team.founded?.toString() ?: "No Data",
+                    teamShort = team.short_code ?: "No Data",
+                    teamImgPath = team.image_path,
+                    teamActiveSeasonId = currentLeague.seasonId // Use current league's seasonId
+                )
+                findNavController().navigate(directions)
+            }
         }
 
         binding.recyclerViewStandings.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = standingsAdapter
         }
+    }
 
-        standingsViewModel.fetchStandings(seasonId = 23584)
-        binding.recyclerViewStandings.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = standingsAdapter
+    private fun setupLeagueSelection() {
+        binding.leagueToggleGroup.apply {
+            check(R.id.buttonDanishSuperliga) // Set default selection
+
+            addOnButtonCheckedListener { _, checkedId, isChecked ->
+                if (isChecked) {
+                    when (checkedId) {
+                        R.id.buttonDanishSuperliga -> {
+                            standingsViewModel.setCurrentLeague(standingsViewModel.leagues[0])
+                        }
+                        R.id.buttonScottishPremierLeague -> {
+                            standingsViewModel.setCurrentLeague(standingsViewModel.leagues[1])
+                        }
+                    }
+                }
+            }
         }
+    }
 
-        // Set up buttons for league selection
-        binding.buttonDanishSuperliga.setOnClickListener {
-            standingsViewModel.fetchStandings(seasonId = 23584) // Fetch Danish Superliga standings
-        }
-
-        binding.buttonScottishPremierLeague.setOnClickListener {
-            standingsViewModel.fetchStandings(seasonId = 23690) // Fetch Scottish Premier League standings
-        }
-
-        //standings data
+    private fun observeViewModel() {
+        // Observe standings data
         standingsViewModel.standings.observe(viewLifecycleOwner) { standings ->
             if (standings.isNotEmpty()) {
                 standingsAdapter.submitList(standings)
@@ -74,12 +89,12 @@ class StandingsFragment : Fragment() {
             }
         }
 
-        //loading state
+        // Observe loading state
         standingsViewModel.loading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBarStandings.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
 
-        //error state
+        // Observe error state
         standingsViewModel.error.observe(viewLifecycleOwner) { errorMessage ->
             if (errorMessage != null && errorMessage.isNotEmpty()) {
                 binding.textViewErrorStandings.visibility = View.VISIBLE
@@ -89,8 +104,8 @@ class StandingsFragment : Fragment() {
                 binding.textViewErrorStandings.visibility = View.GONE
             }
         }
-    }
 
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

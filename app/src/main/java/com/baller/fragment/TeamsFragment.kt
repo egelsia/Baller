@@ -37,7 +37,8 @@ class TeamsFragment : Fragment() {
                     teamName = team.name,
                     teamFounded = team.founded?.toString() ?: "No Data",
                     teamShort = team.short_code ?: "No Data",
-                    teamImgPath = team.image_path
+                    teamImgPath = team.image_path,
+                    teamActiveSeasonId = team.activeseasons?.get(0)?.id ?: -1
                 )
             findNavController().navigate(directions)
         }

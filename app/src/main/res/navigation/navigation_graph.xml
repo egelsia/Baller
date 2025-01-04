@@ -39,13 +39,18 @@
                 android:name="teamImgPath"
                 app:argType="string"
                 />
+            <argument
+                android:name="teamActiveSeasonId"
+                app:argType="integer"
+                />
         </action>
     </fragment>
 
     <fragment
         android:id="@+id/teamsFragment"
         android:name="com.baller.fragment.TeamsFragment"
-        android:label="TeamsFragment" >
+        android:label="TeamsFragment"
+        tools:layout="@layout/fragment_teams">
         <action
             android:id="@+id/action_teamsFragment_to_teamDetailsActivity"
             app:destination="@id/teamDetailsActivity">
@@ -68,6 +73,10 @@
             <argument
                 android:name="teamImgPath"
                 app:argType="string"
+                />
+            <argument
+                android:name="teamActiveSeasonId"
+                app:argType="integer"
                 />
         </action>
     </fragment>
@@ -96,6 +105,10 @@
         <argument
             android:name="teamImgPath"
             app:argType="string"
+            />
+        <argument
+            android:name="teamActiveSeasonId"
+            app:argType="integer"
             />
     </activity>
 

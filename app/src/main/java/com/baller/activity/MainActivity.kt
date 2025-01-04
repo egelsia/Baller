@@ -33,6 +33,4 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNavigationView.setupWithNavController(navController)
     }
-    // Danish Superliga season id = 23584
-    // Scottish Premiership season id = 23690
 }

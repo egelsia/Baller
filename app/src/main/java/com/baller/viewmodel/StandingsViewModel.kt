@@ -43,4 +43,26 @@ class StandingsViewModel: ViewModel() {
             _loading.value = false
         }
     }
+
+    private val _currentLeague = MutableLiveData<League>()
+    val currentLeague: LiveData<League> = _currentLeague
+
+    data class League(
+        val name: String,
+        val seasonId: Int
+    )
+
+    val leagues = listOf(
+        League("Danish Superliga", 23584),
+        League("Scottish Premier League", 23690)
+    )
+
+    init {
+        _currentLeague.value = leagues[0]
+    }
+
+    fun setCurrentLeague(league: League) {
+        _currentLeague.value = league
+        fetchStandings(league.seasonId)
+    }
 }

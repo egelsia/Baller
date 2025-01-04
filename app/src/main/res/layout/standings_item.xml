@@ -12,7 +12,7 @@
             type="com.baller.viewmodel.StandingsViewModel" />
     </data>
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardElevation="1dp"
@@ -95,6 +95,6 @@
                 tools:src="@drawable/ic_horizontal_black"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
 </layout>
