@@ -8,7 +8,6 @@
 
 - **User-Friendly Interface**: A streamlined and intuitive design to ensure an excellent user experience.
 - **Robust Functionality**: Allows users to see fixtures,scores and standings 
-- **Customizable Settings**: Tailor the app to meet individual needs.
 - **Integration Capabilities**: SportMonks API 
 
 ---
