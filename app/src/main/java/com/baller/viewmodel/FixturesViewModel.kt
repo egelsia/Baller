@@ -6,12 +6,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baller.model.Fixture
-import com.baller.service.APIService
-import com.baller.service.ApiResult
+import com.baller.repository.FixturesRepository
 import kotlinx.coroutines.launch
 
-class FixturesViewModel: ViewModel() {
-    private val apiService = APIService()
+class FixturesViewModel(
+    private val repository: FixturesRepository
+) : ViewModel() {
+
     private val TAG = "FixturesViewModel"
 
     private val _fixtures = MutableLiveData<List<Fixture>>()
@@ -26,20 +27,17 @@ class FixturesViewModel: ViewModel() {
     fun fetchTeamFixture(seasonId: Int, teamId: Int) {
         viewModelScope.launch {
             _loading.value = true
-
-            when (val result = apiService.getTeamSchedules(seasonId, teamId)) {
-                is ApiResult.Success -> {
-                    _fixtures.value = result.data
-                    _error.value = ""
-                }
-                is ApiResult.Error -> {
-                    _fixtures.value = emptyList()
-                    _error.value = result.message
-                    Log.e(TAG, "Error ${result.code}: ${result.message}")
-                }
+            try {
+                val data = repository.getTeamSchedules(seasonId, teamId)
+                _fixtures.value = data
+                _error.value = ""
+            } catch (e: Exception) {
+                _fixtures.value = emptyList()
+                _error.value = "Error: ${e.message}"
+                Log.e(TAG, "Error: ${e.message}")
+            } finally {
+                _loading.value = false
             }
-
-            _loading.value = false
         }
     }
 }

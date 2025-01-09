@@ -8,12 +8,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.baller.model.League
 import com.baller.model.Team
+import com.baller.repository.TeamsRepository
 import com.baller.service.APIService
 import com.baller.service.ApiResult
 import com.baller.utils.LeagueUtils
 import kotlinx.coroutines.launch
 
-class TeamsViewModel: ViewModel() {
+class TeamsViewModel(
+    private val repository: TeamsRepository
+): ViewModel() {
 
     private val apiService = APIService()
     private val TAG = "TeamsViewModel"
@@ -45,20 +48,17 @@ class TeamsViewModel: ViewModel() {
 
     fun fetchTeams() {
         viewModelScope.launch {
-
             _loading.value = true
-
-            when (val result = apiService.getAllTeams()) {
-                is ApiResult.Success -> {
-                    _teams.value = result.data
-                }
-                is ApiResult.Error -> {
-                    _teams.value = emptyList()
-                    _error.value = result.message
-                    Log.w(TAG, "${result.code}: ${result.message}")
-                }
+            try {
+                val data = repository.getAllTeams()
+                _teams.value = data
+                _error.value = ""
+            } catch (e: Exception) {
+                _teams.value = emptyList()
+                _error.value = "Error: ${e.message}"
+            } finally {
+                _loading.value = false
             }
-            _loading.value = false
         }
     }
 }
