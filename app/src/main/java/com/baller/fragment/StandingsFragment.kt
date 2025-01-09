@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.baller.R
 import com.baller.adapter.StandingsAdapter
 import com.baller.databinding.FragmentStandingsBinding
@@ -20,17 +19,12 @@ import com.baller.viewmodel.StandingsViewModel
 
 class StandingsFragment : Fragment() {
 
-    // View binding
     private var _binding: FragmentStandingsBinding? = null
     private val binding get() = _binding!!
-
-    // ViewModel
     private lateinit var standingsViewModel: StandingsViewModel
 
-    // Recycler adapter
     private lateinit var standingsAdapter: StandingsAdapter
 
-    // Custom factory so we can pass the repository into the VM constructor
     inner class StandingsViewModelFactory(
         private val repository: StandingsRepository
     ) : ViewModelProvider.Factory {
@@ -51,25 +45,21 @@ class StandingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Create the repository + ViewModel
         val repository = StandingsRepository(requireContext())
         standingsViewModel = ViewModelProvider(
             this,
             StandingsViewModelFactory(repository)
         )[StandingsViewModel::class.java]
 
-        // Prepare the adapter and assign the onClick action
         standingsAdapter = StandingsAdapter(standingsViewModel) { team ->
             navigateToTeamDetails(team)
         }
 
-        // Setup RecyclerView
         binding.recyclerViewStandings.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = standingsAdapter
         }
 
-        // Setup league toggle group
         binding.leagueToggleGroup.apply {
             check(R.id.buttonDanishSuperliga) // Default selection
             addOnButtonCheckedListener { _, checkedId, isChecked ->

@@ -49,7 +49,6 @@ class TeamsFragment : Fragment() {
             }
         )[TeamsViewModel::class.java]
         teamViewModel.initLeagues(requireContext())
-        // Prepare UI
         val adapter = TeamAdapter(teamViewModel) { team ->
             val directions = TeamsFragmentDirections.actionTeamsFragmentToTeamDetailsActivity(
                 teamId = team.id,
@@ -57,7 +56,7 @@ class TeamsFragment : Fragment() {
                 teamFounded = team.founded?.toString() ?: "No Data",
                 teamShort = team.short_code ?: "No Data",
                 teamImgPath = team.image_path,
-                teamActiveSeasonId = team.activeseasons?.get(0)?.id ?: -1
+                teamActiveSeasonId = team.activeseasons?.firstOrNull()?.id ?: -1
             )
             findNavController().navigate(directions)
         }
@@ -79,7 +78,6 @@ class TeamsFragment : Fragment() {
 
         teamViewModel.loading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-            // If loading finishes, also stop the refresh indicator just in case
             if (!isLoading) {
                 swipeRefresh.isRefreshing = false
             }
@@ -87,11 +85,12 @@ class TeamsFragment : Fragment() {
 
         teamViewModel.error.observe(viewLifecycleOwner) { errorMessage ->
             errorMessage?.let {
-                Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                if(errorMessage != "") {
+                    Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+                }
             }
         }
 
-        // Make initial fetch
         teamViewModel.fetchTeams()
     }
 

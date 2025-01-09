@@ -53,11 +53,14 @@ class TeamDetailsActivity : AppCompatActivity() {
         observeViewModel()
 
         swipeRefreshLayout.setOnRefreshListener {
-            viewModel.fetchTeamFixture(args.teamActiveSeasonId, args.teamId)
+            if(args.teamActiveSeasonId != -1) {
+                viewModel.fetchTeamFixture(args.teamActiveSeasonId, args.teamId)
+            }
             swipeRefreshLayout.isRefreshing = false
         }
-
-        viewModel.fetchTeamFixture(args.teamActiveSeasonId, args.teamId)
+        if (args.teamActiveSeasonId != -1) {
+            viewModel.fetchTeamFixture(args.teamActiveSeasonId, args.teamId)
+        }
     }
 
     private fun setupViews(args: TeamDetailsActivityArgs) {
@@ -89,7 +92,7 @@ class TeamDetailsActivity : AppCompatActivity() {
         }
 
         viewModel.error.observe(this) { error ->
-            if (error.isNotEmpty()) {
+            if (error != "") {
                 Toast.makeText(this, error, Toast.LENGTH_LONG).show()
             }
         }

@@ -8,8 +8,8 @@ import com.baller.db.entities.FixtureEntity
 
 @Dao
 interface FixturesDao {
-    @Query("SELECT * FROM fixtures")
-    suspend fun getAllFixtures(): List<FixtureEntity>
+    @Query("SELECT * FROM fixtures WHERE teamId = :teamId")
+    suspend fun getFixturesByTeamId(teamId: Int): List<FixtureEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFixtures(fixtures: List<FixtureEntity>)

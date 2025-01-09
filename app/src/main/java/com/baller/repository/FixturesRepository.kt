@@ -17,18 +17,19 @@ class FixturesRepository(private val context: Context) {
     suspend fun getTeamSchedules(seasonId: Int, teamId: Int): List<Fixture> {
         if (!NetworkUtils.isInternetAvailable(context)) {
             Toast.makeText(context, "No internet. Showing cached fixtures.", Toast.LENGTH_LONG).show()
-            val cached = fixturesDao.getAllFixtures()
+            val cached = fixturesDao.getFixturesByTeamId(teamId)
             return cached.map { it.toFixture() }
         } else {
             when (val result = apiService.getTeamSchedules(seasonId, teamId)) {
                 is ApiResult.Success -> {
-                    // Convert each to an entity
-                    val entities = result.data.map { FixtureEntity.fromFixture(it) }
+                    val entities = result.data.map { fixture ->
+                        FixtureEntity.fromFixture(fixture, teamId)
+                    }
                     fixturesDao.insertFixtures(entities)
                     return result.data
                 }
                 is ApiResult.Error -> {
-                    val cached = fixturesDao.getAllFixtures()
+                    val cached = fixturesDao.getFixturesByTeamId(teamId)
                     if (cached.isNotEmpty()) {
                         Toast.makeText(context, "Error. Showing cached fixtures.", Toast.LENGTH_LONG).show()
                         return cached.map { it.toFixture() }
